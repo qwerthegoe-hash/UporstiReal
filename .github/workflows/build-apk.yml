@@ -34,9 +34,11 @@ jobs:
           recipe = Path("python-for-android/pythonforandroid/recipes/python3/__init__.py")
           source = recipe.read_text()
           marker = "        'ac_cv_file__dev_ptmx=yes',"
-          replacement = "        'ac_cv_header_uuid_h=no',
-        'ac_cv_header_uuid_uuid_h=no',
-" + marker
+          replacement = "\n".join([
+              "        'ac_cv_header_uuid_h=no',",
+              "        'ac_cv_header_uuid_uuid_h=no',",
+              marker,
+          ])
           if marker not in source:
               raise SystemExit("Не найден маркер configure_args python3 recipe")
           recipe.write_text(source.replace(marker, replacement, 1))
