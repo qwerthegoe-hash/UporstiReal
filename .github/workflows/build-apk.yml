@@ -13,7 +13,9 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Распаковка исходников проекта
-        run: unzip -o teams_autojoiner_ready_for_github.zip -d . -x '.github/*'
+        run: |
+          unzip -o teams_autojoiner_ready_for_github.zip -d . -x '.github/*'
+          sed -i 's/kivy==2.2.1/kivy==2.3.0/' buildozer.spec
 
       - uses: actions/setup-python@v5
         with:
