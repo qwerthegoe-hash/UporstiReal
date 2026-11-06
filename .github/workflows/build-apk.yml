@@ -13,6 +13,22 @@ jobs:
         run: |
           unzip -o teams_autojoiner_ready_for_github.zip -d . -x '.github/*'
           sed -i 's/kivy==2.2.1/kivy==2.3.0/' buildozer.spec
+          python - <<'PY'
+          from pathlib import Path
+          spec = Path("buildozer.spec")
+          lines = spec.read_text().splitlines()
+          for index, line in enumerate(lines):
+              if line.strip().startswith("requirements"):
+                  key, value = line.split("=", 1)
+                  items = [item.strip() for item in value.split(",") if item.strip()]
+                  if "liblzma" not in items:
+                      items.append("liblzma")
+                  lines[index] = f"{key.rstrip()} = {','.join(items)}"
+                  break
+          else:
+              raise SystemExit("Не найден параметр requirements в buildozer.spec")
+          spec.write_text("\n".join(lines) + "\n")
+          PY
           sed -i '/^android.accept_sdk_license/a p4a.branch = v2024.01.21' buildozer.spec
           sed -i '/^p4a.branch =/a p4a.source_dir = ./python-for-android' buildozer.spec
       - uses: actions/setup-python@v5
@@ -37,7 +53,6 @@ jobs:
           replacement = "\n".join([
               "        'ac_cv_header_uuid_h=no',",
               "        'ac_cv_header_uuid_uuid_h=no',",
-              "        'ac_cv_header_lzma_h=no',",
               marker,
           ])
           if marker not in source:
@@ -51,4 +66,3 @@ jobs:
         with:
           name: teams-autojoiner-apk
           path: bin/*.apk
-
