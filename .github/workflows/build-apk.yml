@@ -12,6 +12,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Распаковка исходников проекта
+        run: unzip -o teams_autojoiner_ready_for_github.zip -d . -x '.github/*'
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
