@@ -37,6 +37,7 @@ jobs:
           replacement = "\n".join([
               "        'ac_cv_header_uuid_h=no',",
               "        'ac_cv_header_uuid_uuid_h=no',",
+              "        'ac_cv_header_lzma_h=no',",
               marker,
           ])
           if marker not in source:
@@ -50,3 +51,4 @@ jobs:
         with:
           name: teams-autojoiner-apk
           path: bin/*.apk
+
