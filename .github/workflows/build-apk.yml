@@ -34,6 +34,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
       - name: Системные зависимости
         run: |
           sudo apt-get update
@@ -49,10 +53,10 @@ jobs:
           from pathlib import Path
           recipe = Path("python-for-android/pythonforandroid/recipes/python3/__init__.py")
           source = recipe.read_text()
-          marker = "        'ac_cv_file__dev_ptmx=yes',"
+          marker = " 'ac_cv_file__dev_ptmx=yes',"
           replacement = "\n".join([
-              "        'ac_cv_header_uuid_h=no',",
-              "        'ac_cv_header_uuid_uuid_h=no',",
+              " 'ac_cv_header_uuid_h=no',",
+              " 'ac_cv_header_uuid_uuid_h=no',",
               marker,
           ])
           if marker not in source:
